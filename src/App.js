@@ -1,23 +1,24 @@
-import logo from './logo.svg';
-import './App.css';
+import { Container, Card, CardHeader, Avatar } from "@mui/material";
+import db from "./userData";
+import Image from "./components/Image";
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <Container>
+        <Card>
+          <CardHeader avatar={<Avatar>JD</Avatar>} title="Jane Doe" />
+          <div>
+            {db.images.map((image) => (
+              <Image
+                key={image.id}
+                description={image.description}
+                url={image.url}
+              />
+            ))}
+          </div>
+        </Card>
+      </Container>
     </div>
   );
 }
