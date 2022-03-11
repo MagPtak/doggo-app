@@ -8,33 +8,23 @@ import {
 import ThumbDownIcon from "@mui/icons-material/ThumbDown";
 import ThumbUpIcon from "@mui/icons-material/ThumbUp";
 import { makeStyles } from "@mui/styles";
-import { useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { likeIncrease, dislikeIncrease } from "../actions";
 
 const useStyles = makeStyles({
   media: {
     height: 500,
   },
   unlikeButton: {
-    color: "red",
+    color: "#A9BA9D",
   },
 });
 
-function Image({ description, url }) {
-  const [likeCounter, setLikeCounter] = useState("");
-  const [dislikeCounter, setDislikeCounter] = useState("");
+function Image({ description, url, id }) {
   const classes = useStyles();
-
-  function handLikeCounter() {
-    let currentCount = likeCounter;
-    currentCount++;
-    setLikeCounter(currentCount);
-  }
-
-  function handleDislikeCounter() {
-    let currentCount = dislikeCounter;
-    currentCount++;
-    setDislikeCounter(currentCount);
-  }
+  const likeCounter = useSelector((state) => state.likeCounter);
+  const dislikeCounter = useSelector((state) => state.dislikeCounter);
+  const dispatch = useDispatch();
 
   return (
     <>
@@ -44,19 +34,28 @@ function Image({ description, url }) {
       </CardContent>
       <CardActions>
         <div>
-          <label>{likeCounter}</label>
+          <label>
+            {likeCounter.find((obj) => obj.id === id)
+              ? likeCounter.find((obj) => obj.id === id).likes
+              : 0}
+          </label>
         </div>
         <Button>
-          <ThumbUpIcon color="success" onClick={handLikeCounter} />
+          <ThumbUpIcon
+            color="success"
+            onClick={() => dispatch(likeIncrease(id))}
+          />
         </Button>
         <Button>
           <ThumbDownIcon
             className={classes.unlikeButton}
-            onClick={handleDislikeCounter}
+            onClick={() => dispatch(dislikeIncrease(id))}
           />
         </Button>
         <div>
-          <label>{dislikeCounter}</label>
+          {dislikeCounter.find((obj) => obj.id === id)
+            ? dislikeCounter.find((obj) => obj.id === id).likes
+            : 0}
         </div>
       </CardActions>
     </>
